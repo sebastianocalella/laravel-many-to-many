@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use App\Models\Tecnology;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class TecnologyController extends Controller
@@ -14,7 +15,7 @@ class TecnologyController extends Controller
         'name' => 'required|max:18',
         'accent_color' => 'nullable',
         'bg_color' => 'nullable',
-        'slug' => 'required|unique'
+        'slug' => 'unique'
     ];
 
     /**
@@ -47,11 +48,14 @@ class TecnologyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate($this->validationRules);
-        $newtecnology = new tecnology();
-        $newtecnology->fill($data);
-        $newtecnology->save();
+        $newTecnology = new tecnology();
+        $newTecnology->fill($data);
+        $newTecnology->slug = Str::slug($newTecnology->name);
+        $newTecnology->save();
+        $newTecnology->slug = $newTecnology->slug . "-$newTecnology->id";
+        $newTecnology->update();
 
-        return redirect()->route('admin.tecnologies.index')->with('message',"tecnology $newtecnology->name has benn created succesfully");
+        return redirect()->route('admin.tecnologies.index')->with('message',"tecnology $newTecnology->name has benn created succesfully");
     }
 
     /**
