@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Tecnology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,14 +21,16 @@ class ProjectController extends Controller
         'slug' => 'unique',
         'description' => 'required',
         'image_path' => 'image',
-        'type_id' => 'required|exists:types,id'
+        'type_id' => 'required|exists:types,id',
+        'tecnologies' => 'array|exists:tecnologies,id'
     ];
 
     protected $validationRules = [
         'title' => ['required'],
         'slug' => 'unique:projects',
         'description' => 'required',
-        'type_id' => 'required|exists:types,id'
+        'type_id' => 'required|exists:types,id',
+        'tecnologies' => 'array|exists:tecnologies,id'
     ];
 
     /**
@@ -48,7 +51,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create', ['project' => new Project(), 'types' => Type::all()]);
+        return view('admin.projects.create', ['project' => new Project(), 'types' => Type::all(), 'tecnologies' => Tecnology::all()]);
     }
 
     /**
@@ -68,6 +71,7 @@ class ProjectController extends Controller
         $newProject = new Project();
         $newProject->fill($data);
         $newProject->save();
+        $newProject->tecnologies()->sync($data['tecnologies']);
 
         return redirect()->route('admin.projects.index')->with('message',"Project $newProject->title has benn created succesfully");
     }
