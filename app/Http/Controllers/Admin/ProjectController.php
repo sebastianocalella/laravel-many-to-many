@@ -97,7 +97,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit',['project' => $project, 'types' => Type::all()]);
+        return view('admin.projects.edit',['project' => $project, 'types' => Type::all(), 'tecnologies' => Tecnology::all()]);
     }
 
     /**
@@ -115,6 +115,7 @@ class ProjectController extends Controller
         $data['slug'] = Str::slug($data['title']);
         $data['modification_date'] = now()->format('Y-m-d H-i-s');
         $project->update($data);
+        $project->tecnologies()->sync($data['tecnologies']);
         return redirect()->route('admin.projects.show', compact('project'));
     }
 
