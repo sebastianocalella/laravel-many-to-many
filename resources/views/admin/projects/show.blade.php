@@ -8,6 +8,11 @@
             </div>
             <div class="card-body">
                 <h3 class="card-title"><span class="text-secondary">designed by: </span>{{$project->author}} <span class="text-secondary"> --- a </span>{{$project->type->name}} <span class="text-secondary">project</span></h3>
+                <div class="d-flex justify-content-evenly rounded bg-secondary bg-gradient my-3 col-8 offset-2">
+                    @foreach ($project->tecnologies as $tecnology)
+                        <span style="color: {{$tecnology->accent_color}}">#{{$tecnology->name}} </span>
+                    @endforeach
+                </div>
                 <div class="card-image">
                     @if (str_starts_with($project->image_path, 'http'))
                         <img src="{{$project->image_path}}"
