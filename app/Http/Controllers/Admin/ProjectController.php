@@ -71,7 +71,11 @@ class ProjectController extends Controller
         $newProject = new Project();
         $newProject->fill($data);
         $newProject->save();
-        $newProject->tecnologies()->sync($data['tecnologies']);
+        if (isset($data['tecnologies'])){
+            $newProject->tecnologies()->sync($data['tecnologies']);
+        }else{
+            $newProject->tecnologies()->sync([]);
+        }
 
         return redirect()->route('admin.projects.index')->with('message',"Project $newProject->title has benn created succesfully");
     }
@@ -115,7 +119,11 @@ class ProjectController extends Controller
         $data['slug'] = Str::slug($data['title']);
         $data['modification_date'] = now()->format('Y-m-d H-i-s');
         $project->update($data);
-        $project->tecnologies()->sync($data['tecnologies']);
+        if (isset($data['tecnologies'])){
+            $project->tecnologies()->sync($data['tecnologies']);
+        }else{
+            $project->tecnologies()->sync([]);
+        }
         return redirect()->route('admin.projects.show', compact('project'));
     }
 
