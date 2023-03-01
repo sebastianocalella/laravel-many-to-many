@@ -14,6 +14,7 @@ class TecnologyController extends Controller
         'name' => 'required|max:18',
         'accent_color' => 'nullable',
         'bg_color' => 'nullable',
+        'slug' => 'required|unique'
     ];
 
     /**
@@ -25,7 +26,6 @@ class TecnologyController extends Controller
     {
         $tecnologies = Tecnology::all();
         return view('admin.tecnologies.index', ['tecnologies' => $tecnologies]);
-
     }
 
     /**
@@ -57,10 +57,10 @@ class TecnologyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Tecnology $tecnology
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Tecnology $tecnology)
     {
         return view('admin.tecnologies.show', compact('tecnology'));
     }
