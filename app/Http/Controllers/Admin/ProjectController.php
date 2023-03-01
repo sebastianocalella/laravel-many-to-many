@@ -182,6 +182,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $project->tecnologies()->sync([]);
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "Project \"$project->title\" has been moved to the trash");
     }
